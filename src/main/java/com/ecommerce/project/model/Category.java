@@ -1,6 +1,8 @@
 package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "categories")
@@ -9,7 +11,11 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long catId;
+
+    @NotBlank
     private String catName;
+
+    @Size(max=255, message = "description must be 5 char to 255")
     private String catDescription;
 
     public Category() {
