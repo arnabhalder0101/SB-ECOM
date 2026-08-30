@@ -33,6 +33,11 @@ public class MyGlobalExceptionHandler  {
 
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> myResourceNotFoundException(ResourceNotFoundException e){
+        return null;
+    }
+
 
 //    @ExceptionHandler(Exception.class)
 //    public ResponseEntity<Map<String, String>> myGenericException(Exception e){

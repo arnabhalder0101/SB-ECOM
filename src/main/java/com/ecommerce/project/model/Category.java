@@ -12,7 +12,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long catId;
 
-    @NotBlank
+    @NotBlank(message = "category name must not be blank")
+    @Size(min=2, max = 20, message = "min length is 5 max is 20")
     private String catName;
 
     @Size(max=255, message = "description must be 5 char to 255")
