@@ -42,19 +42,19 @@ public class CategoryController {
             String status = categoryService.deleteCategory(catId);
             return new ResponseEntity<>(status, HttpStatus.OK);
 
-        } catch (ResponseStatusException e) {
-            return new ResponseEntity<>(e.getReason(), e.getStatusCode());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/admin/category/{catId}")
-    public ResponseEntity<String> updateCategory(@PathVariable Long catId, @RequestBody Category category){
-            try{
-                Category updatedCategory = categoryService.updateCategory(catId, category);
-                return new ResponseEntity<>("Updated: "+ updatedCategory.toString(), HttpStatus.OK);
-            }catch (ResponseStatusException e){
-                return new ResponseEntity<>(e.getReason(), e.getStatusCode());
-            }
+    public ResponseEntity<String> updateCategory(@PathVariable Long catId, @Valid @RequestBody Category category) {
+        try {
+            Category updatedCategory = categoryService.updateCategory(catId, category);
+            return new ResponseEntity<>("Updated: " + updatedCategory.toString(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
