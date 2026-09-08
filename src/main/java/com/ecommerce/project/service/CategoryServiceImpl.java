@@ -30,7 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new APIException("No Data Exists.");
         }
 
-        return categoryRepository.findAll();
+        return categories;
     }
 
     @Override
