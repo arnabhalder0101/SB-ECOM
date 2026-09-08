@@ -1,5 +1,6 @@
 package com.ecommerce.project.service;
 
+import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.repository.CategoryRepository;
@@ -23,11 +24,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> getAllCategory() {
+        List<Category> categories = categoryRepository.findAll();
+
+        if(categories.isEmpty()){
+            throw new APIException("No Data Exists.");
+        }
+
         return categoryRepository.findAll();
     }
 
     @Override
     public void addCategory(Category newCategory) {
+
+        Category existingCategory = categoryRepository.findByCatName(newCategory.getCatName());
+
+        if(existingCategory != null){
+            throw new APIException("Category with category name \""+ newCategory.getCatName()+ "\" exists.");
+        }
         categoryRepository.save(newCategory);
 
 
@@ -36,16 +49,21 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public String deleteCategory(Long id) {
 
+        /*
         List<Category> allCategories= categoryRepository.findAll();
 
         Category category = allCategories.stream()
                 .filter(c -> c.getCatId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", id));
+        */
 
-        categoryRepository.delete(category);
+        Category existingCategory = categoryRepository.findById(id).orElseThrow(() -> new APIException("Category with the ID: "+ id+ " does not  exists."));
 
-        return "Deleted \n" + category;
+
+        categoryRepository.delete(existingCategory);
+
+        return "Deleted \n" + existingCategory;
     }
 
     @Override
