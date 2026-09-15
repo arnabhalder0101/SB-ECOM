@@ -11,5 +11,5 @@ public interface CategoryService {
     public CategoryResponse getAllCategory();
     public CategoryDTO addCategory(Category newCategory);
     public CategoryDTO updateCategory(Long id, Category category);
-    public String deleteCategory(Long id);
+    public CategoryDTO deleteCategory(Long id);
 }

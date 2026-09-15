@@ -65,29 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public String deleteCategory(Long id) {
-
-        /*
-        List<Category> allCategories= categoryRepository.findAll();
-
-        Category category = allCategories.stream()
-                .filter(c -> c.getCatId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", id));
-        */
-
-        Category existingCategory = categoryRepository.findById(id).orElseThrow(() -> new APIException("Category with the ID: "+ id+ " does not  exists."));
-
-
-        categoryRepository.delete(existingCategory);
-
-        return "Deleted \n" + existingCategory;
-    }
-
-    @Override
     public CategoryDTO updateCategory(Long id, Category category) {
-
-//List<Category> allCategories= categoryRepository.findAll();
 
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", id));
@@ -105,6 +83,28 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     }
+
+    @Override
+    public CategoryDTO deleteCategory(Long id) {
+
+        /*
+        List<Category> allCategories= categoryRepository.findAll();
+
+        Category category = allCategories.stream()
+                .filter(c -> c.getCatId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", id));
+        */
+
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new APIException("Category with the ID: "+ id+ " does not  exists."));
+
+        categoryRepository.delete(existingCategory);
+
+        return modelMapper.map(existingCategory, CategoryDTO.class);
+    }
+
+
 
 
 }

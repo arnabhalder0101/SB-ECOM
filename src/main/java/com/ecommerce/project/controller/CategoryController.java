@@ -60,15 +60,18 @@ public class CategoryController {
     }
 
     @DeleteMapping("/admin/category/{catId}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long catId) {
+    public ResponseEntity<APIResposne> deleteCategory(@PathVariable Long catId) {
 
-        try {
-            String status = categoryService.deleteCategory(catId);
-            return new ResponseEntity<>(status, HttpStatus.OK);
+        CategoryDTO deleteCategory = categoryService.deleteCategory(catId);
 
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        APIResposne apiResposne = new APIResposne();
+
+        apiResposne.setMessage("Category Deleted Successfully.");
+        apiResposne.setObject(deleteCategory.toString());
+        apiResposne.setStatusCode(HttpStatus.OK);
+
+        return new ResponseEntity<>(apiResposne, HttpStatus.OK);
+
     }
 
 
