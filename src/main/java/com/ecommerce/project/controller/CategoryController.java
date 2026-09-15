@@ -43,6 +43,22 @@ public class CategoryController {
         return new ResponseEntity<>(apiResposne, HttpStatus.CREATED);
     }
 
+    @PutMapping("/admin/category/{catId}")
+    public ResponseEntity<APIResposne> updateCategory(@PathVariable Long catId, @Valid @RequestBody Category category) {
+
+        CategoryDTO updatedCategory = categoryService.updateCategory(catId, category);
+
+        APIResposne apiResposne = new APIResposne();
+
+        apiResposne.setMessage("Category Updated Successfully.");
+        apiResposne.setObject(updatedCategory.toString());
+        apiResposne.setStatusCode(HttpStatus.OK);
+
+        return new ResponseEntity<>(apiResposne, HttpStatus.OK);
+
+
+    }
+
     @DeleteMapping("/admin/category/{catId}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long catId) {
 
@@ -55,15 +71,5 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("/admin/category/{catId}")
-    public ResponseEntity<String> updateCategory(@PathVariable Long catId, @Valid @RequestBody Category category) {
-        try {
-            Category updatedCategory = categoryService.updateCategory(catId, category);
-            return new ResponseEntity<>("Updated: " + updatedCategory.toString(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
 
 }

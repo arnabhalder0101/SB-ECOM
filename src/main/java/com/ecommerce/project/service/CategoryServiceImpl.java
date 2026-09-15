@@ -85,29 +85,23 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(Long id, Category category) {
+    public CategoryDTO updateCategory(Long id, Category category) {
 
-        List<Category> allCategories= categoryRepository.findAll();
+//List<Category> allCategories= categoryRepository.findAll();
 
-        Optional<Category> cat = allCategories.stream()
-                .filter(c -> c.getCatId().equals(id))
-                .findFirst();
+        Category existingCategory = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", id));
 
-        if (cat.isPresent()) {
 
-            Category existingcategory = cat.get();
+        // updates
+        if (category.getCatName() != null)
+            existingCategory.setCatName(category.getCatName());
+        if (category.getCatDescription() != null)
+            existingCategory.setCatDescription(category.getCatDescription());
 
-            // updates
-            if (category.getCatName() != null)
-                existingcategory.setCatName(category.getCatName());
-            if (category.getCatDescription() != null)
-                existingcategory.setCatDescription(category.getCatDescription());
+        Category savedCategory = categoryRepository.save(existingCategory);
 
-            return categoryRepository.save(existingcategory);
-
-        } else {
-            throw new ResourceNotFoundException("Category", "Id", id);
-        }
+        return modelMapper.map(savedCategory, CategoryDTO.class);
 
 
     }

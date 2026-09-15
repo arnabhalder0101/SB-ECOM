@@ -10,7 +10,6 @@ import java.util.List;
 public interface CategoryService {
     public CategoryResponse getAllCategory();
     public CategoryDTO addCategory(Category newCategory);
-
+    public CategoryDTO updateCategory(Long id, Category category);
     public String deleteCategory(Long id);
-    public Category updateCategory(Long id, Category category);
 }
