@@ -1,6 +1,9 @@
 package com.ecommerce.project.controller;
 
 import com.ecommerce.project.model.Category;
+import com.ecommerce.project.payload.APIResposne;
+import com.ecommerce.project.payload.CategoryDTO;
+import com.ecommerce.project.payload.CategoryResponse;
 import com.ecommerce.project.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +26,21 @@ public class CategoryController {
     }
 
     @GetMapping("/public/category")
-    public ResponseEntity<List<Category>> getAllCategory() {
+    public ResponseEntity<CategoryResponse> getAllCategory() {
         return
                 new ResponseEntity<>(this.categoryService.getAllCategory(), HttpStatus.OK);
     }
 
     @PostMapping("/public/category")
-    public ResponseEntity<String> addCategory(@Valid @RequestBody Category newCategory) {
-        categoryService.addCategory(newCategory);
-        return new ResponseEntity<>("category added successfully! \n" + newCategory.toString(), HttpStatus.CREATED);
+    public ResponseEntity<APIResposne> addCategory(@Valid @RequestBody Category newCategory) {
+        CategoryDTO savedCategory = categoryService.addCategory(newCategory);
+        APIResposne apiResposne = new APIResposne();
+
+        apiResposne.setMessage("Category Created Successfully.");
+        apiResposne.setObject(savedCategory.toString());
+        apiResposne.setStatusCode(HttpStatus.CREATED);
+
+        return new ResponseEntity<>(apiResposne, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/admin/category/{catId}")
