@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,10 +37,16 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public CategoryResponse getAllCategory(Integer pageNum, Integer pageSize) {
+    public CategoryResponse getAllCategory(Integer pageNum, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 
-        Pageable pageDetails = PageRequest.of(pageNum, pageSize);
+        System.out.println("DEBUG sortBy: [" + sortBy + "], sortOrder: [" + sortOrder + "]");
+
+        // pageable obj
+        Pageable pageDetails = PageRequest.of(pageNum, pageSize, sortByAndOrder);
+        // JPA pageable repository method
         Page<Category> categoryPage = categoryRepository.findAll(pageDetails);
+
         List<Category> categories = categoryPage.getContent();
 
         if(categories.isEmpty()){
@@ -52,17 +59,23 @@ public class CategoryServiceImpl implements CategoryService {
 
         CategoryResponse categoryResponse = new CategoryResponse();
         categoryResponse.setContent(categoryDTOS);
-        categoryResponse.setLength(categoryDTOS.size());
+        categoryResponse.setPageNumber(categoryPage.getNumber());
+        categoryResponse.setPageSize(categoryPage.getSize());
+        categoryResponse.setTotalPages(categoryPage.getTotalPages());
+        categoryResponse.setTotalElements(categoryPage.getTotalElements());
+        categoryResponse.setLastPage(categoryPage.isLast());
         return categoryResponse;
     }
 
     @Override
-    public CategoryDTO addCategory(Category newCategory) {
+    public CategoryDTO addCategory(CategoryDTO newCategoryDTO) {
 
-        Category existingCategory = categoryRepository.findByCatName(newCategory.getCatName());
+        Category newCategory = modelMapper.map(newCategoryDTO, Category.class);
+
+        Category existingCategory = categoryRepository.findByCategoryName(newCategory.getCategoryName());
 
         if(existingCategory != null){
-            throw new APIException("Category with category name \""+ newCategory.getCatName()+ "\" exists.");
+            throw new APIException("Category with category name \""+ newCategory.getCategoryName()+ "\" exists.");
         }
         Category savedCategory =  categoryRepository.save(newCategory);
 
@@ -71,17 +84,25 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO updateCategory(Long id, Category category) {
+    public CategoryDTO updateCategory(Long id, CategoryDTO categoryDTO) {
+
+        Category category = modelMapper.map(categoryDTO, Category.class);
+
+        // check for same name category
+        Category sameNamedCategory = categoryRepository.findByCategoryName(category.getCategoryName());
+        if(sameNamedCategory != null){
+            throw new APIException("Category exists with same name ::"+sameNamedCategory.getCategoryName());
+        }
 
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", id));
 
 
         // updates
-        if (category.getCatName() != null)
-            existingCategory.setCatName(category.getCatName());
-        if (category.getCatDescription() != null)
-            existingCategory.setCatDescription(category.getCatDescription());
+        if (category.getCategoryName() != null)
+            existingCategory.setCategoryName(category.getCategoryName());
+        if (category.getCategoryDescription() != null)
+            existingCategory.setCategoryDescription(category.getCategoryDescription());
 
         Category savedCategory = categoryRepository.save(existingCategory);
 
