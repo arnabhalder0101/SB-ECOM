@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 public interface CategoryService {
-    public CategoryResponse getAllCategory();
+    public CategoryResponse getAllCategory(Integer pageNum, Integer pageSize);
     public CategoryDTO addCategory(Category newCategory);
     public CategoryDTO updateCategory(Long id, Category category);
     public CategoryDTO deleteCategory(Long id);
