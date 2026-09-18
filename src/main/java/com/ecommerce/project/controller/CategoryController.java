@@ -40,11 +40,12 @@ public class CategoryController {
     @PostMapping("/public/category")
     public ResponseEntity<APIResposne> addCategory(@Valid @RequestBody CategoryDTO newCategoryDTO) {
         CategoryDTO savedCategory = categoryService.addCategory(newCategoryDTO);
-        APIResposne apiResposne = new APIResposne();
 
-        apiResposne.setMessage("Category Created Successfully.");
-        apiResposne.setObject(savedCategory.toString());
-        apiResposne.setStatusCode(HttpStatus.CREATED);
+        APIResposne apiResposne = new APIResposne(
+                "Category Created Successfully.",
+                savedCategory.toString(),
+                true);
+
 
         return new ResponseEntity<>(apiResposne, HttpStatus.CREATED);
     }
@@ -54,14 +55,12 @@ public class CategoryController {
 
         CategoryDTO updatedCategory = categoryService.updateCategory(catId, categoryDTO);
 
-        APIResposne apiResposne = new APIResposne();
-
-        apiResposne.setMessage("Category Updated Successfully.");
-        apiResposne.setObject(updatedCategory.toString());
-        apiResposne.setStatusCode(HttpStatus.OK);
+        APIResposne apiResposne = new APIResposne("Category Updated Successfully.",
+                updatedCategory.toString(),
+                true
+        );
 
         return new ResponseEntity<>(apiResposne, HttpStatus.OK);
-
 
     }
 
@@ -70,11 +69,10 @@ public class CategoryController {
 
         CategoryDTO deleteCategory = categoryService.deleteCategory(catId);
 
-        APIResposne apiResposne = new APIResposne();
-
-        apiResposne.setMessage("Category Deleted Successfully.");
-        apiResposne.setObject(deleteCategory.toString());
-        apiResposne.setStatusCode(HttpStatus.OK);
+        APIResposne apiResposne = new APIResposne("Category Deleted Successfully.",
+                deleteCategory.toString(),
+                true
+                );
 
         return new ResponseEntity<>(apiResposne, HttpStatus.OK);
 

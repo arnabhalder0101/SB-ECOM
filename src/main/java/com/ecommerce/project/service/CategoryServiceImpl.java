@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -75,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category existingCategory = categoryRepository.findByCategoryName(newCategory.getCategoryName());
 
         if(existingCategory != null){
-            throw new APIException("Category with category name \""+ newCategory.getCategoryName()+ "\" exists.");
+            throw new APIException("Category with category name '"+ newCategory.getCategoryName()+ "' exists.");
         }
         Category savedCategory =  categoryRepository.save(newCategory);
 
@@ -90,7 +91,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         // check for same name category
         Category sameNamedCategory = categoryRepository.findByCategoryName(category.getCategoryName());
-        if(sameNamedCategory != null){
+        if(sameNamedCategory != null &&
+                !Objects.equals(sameNamedCategory.getCategoryId(), id)){
             throw new APIException("Category exists with same name ::"+sameNamedCategory.getCategoryName());
         }
 
@@ -124,7 +126,7 @@ public class CategoryServiceImpl implements CategoryService {
         */
 
         Category existingCategory = categoryRepository.findById(id)
-                .orElseThrow(() -> new APIException("Category with the ID: "+ id+ " does not  exists."));
+                .orElseThrow(() -> new ResourceNotFoundException("Category","Id", id));
 
         categoryRepository.delete(existingCategory);
 
