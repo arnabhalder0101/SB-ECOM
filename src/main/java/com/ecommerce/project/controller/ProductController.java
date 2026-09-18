@@ -26,7 +26,7 @@ public class ProductController {
     ModelMapper modelMapper;
 
     @GetMapping("/public/product")
-    public ProductResponse getAllProducts(){
+    public ProductResponse getAllProducts() {
 
         ProductResponse productResponse = productService.getAllProducts();
 
@@ -34,10 +34,18 @@ public class ProductController {
     }
 
     @PostMapping("/admin/categories/{categoryId}/product")
-    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long categoryId){
+    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable Long categoryId) {
 
         ProductDTO savedProduct = productService.addProduct(productDTO, categoryId);
         return new ResponseEntity<>(modelMapper.map(savedProduct, ProductDTO.class), HttpStatus.CREATED);
+
+    }
+
+    @GetMapping("/public/categories/{categoryId}/product")
+    public ResponseEntity<ProductResponse> getProductByCategory(@PathVariable Long categoryId) {
+        ProductResponse productResponse = productService.getProductByCategory(categoryId);
+
+        return new ResponseEntity<>(productResponse, HttpStatus.OK);
 
     }
 

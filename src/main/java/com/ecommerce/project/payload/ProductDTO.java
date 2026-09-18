@@ -1,5 +1,6 @@
 package com.ecommerce.project.payload;
 
+import com.ecommerce.project.model.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,7 +28,11 @@ public class ProductDTO {
     @NotNull(message = "Product price must not be blank")
     private Double productPrice;
 
+    private String productImage;
+
     private Double productDiscount;
 
     private Double productSpecialPrice;
+
+    private Category category;
 }

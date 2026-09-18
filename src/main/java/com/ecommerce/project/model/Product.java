@@ -32,6 +32,8 @@ public class Product {
     @NotNull(message = "Product price must not be blank")
     private Double productPrice;
 
+    private String productImage;
+
     private Double productDiscount;
 
     private Double productSpecialPrice;

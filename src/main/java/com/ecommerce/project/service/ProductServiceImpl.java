@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductRepository productRepository;
@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService{
                 .map(p -> modelMapper.map(p, ProductDTO.class))
                 .toList();
 
-        ProductResponse productResponse= new ProductResponse();
+        ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productDTOS);
 
 
@@ -46,17 +46,41 @@ public class ProductServiceImpl implements ProductService{
         Product product = modelMapper.map(productDTO, Product.class);
 
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(()-> new ResourceNotFoundException("Category", "Id", categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "Id", categoryId));
 
         product.setCategory(category);
-
+        if (product.getProductDiscount() != null) {
+            double special_price = product.getProductPrice() - product.getProductPrice() * (product.getProductDiscount() * 0.01);
+            product.setProductSpecialPrice(special_price);
+        }
         Product sameNamedProduct = productRepository.findByProductName(product.getProductName());
-        if(sameNamedProduct != null){
+        if (sameNamedProduct != null) {
             throw new APIException("Product with same name exists " + product.getProductName());
         }
 
         Product savedProduct = productRepository.save(product);
 
         return modelMapper.map(savedProduct, ProductDTO.class);
+    }
+
+    @Override
+    public ProductResponse getProductByCategory(Long categoryId) {
+
+        //List<Product> products = productRepository.findAllByCategoryId(categoryId);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("category", "ID", categoryId));
+        List<Product> products = productRepository.findByCategory(category);
+
+        if(products == null){
+            throw new ResourceNotFoundException("Product", "category ID", categoryId);
+        }
+
+        List<ProductDTO> productDTOS = products.stream()
+                .map(p -> modelMapper.map(p, ProductDTO.class)).toList();
+
+        ProductResponse pr = new ProductResponse();
+        pr.setContent(productDTOS);
+
+        return  pr;
     }
 }
