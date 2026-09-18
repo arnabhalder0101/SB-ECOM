@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "categories")
+@Table(name = "category")
 public class Category {
 
     @Id
@@ -22,7 +22,7 @@ public class Category {
     @Size(min=2, max = 40, message = "min length is 5 max is 20")
     private String categoryName;
 
-    @Size(max=300, message = "description must be 5 char to 255")
+    @Size(max=300, message = "description must be 5 char to 300")
     private String categoryDescription;
 
 //    public String getCategoryDescription() {

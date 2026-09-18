@@ -10,9 +10,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class APIResposne {
 
-    private HttpStatus statusCode;
     private  String message;
     private String object;
+    private boolean status;
 
 }
 
