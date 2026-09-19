@@ -10,7 +10,6 @@ import com.ecommerce.project.repository.CategoryRepository;
 import com.ecommerce.project.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -71,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("category", "ID", categoryId));
         List<Product> products = productRepository.findByCategory(category);
 
-        if(products == null){
+        if (products == null) {
             throw new ResourceNotFoundException("Product", "category ID", categoryId);
         }
 
@@ -81,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
         ProductResponse pr = new ProductResponse();
         pr.setContent(productDTOS);
 
-        return  pr;
+        return pr;
     }
 
     @Override
@@ -89,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<Product> products = productRepository.findByProductNameContainingIgnoreCase(keyword);
 
-        if(products == null){
+        if (products == null) {
             throw new ResourceNotFoundException("Product", "keyword", keyword);
         }
 
@@ -99,6 +98,66 @@ public class ProductServiceImpl implements ProductService {
         ProductResponse pr = new ProductResponse();
         pr.setContent(productDTOS);
 
-        return  pr;
+        return pr;
+    }
+
+    @Override
+    public ProductDTO updateProduct(ProductDTO productDTO, Long productId) {
+        boolean calculateSpecialPrice = false;
+
+        Product newProduct = modelMapper.map(productDTO, Product.class);
+
+        Product sameNamedProduct = productRepository.findByProductName(newProduct.getProductName());
+
+        if (sameNamedProduct != null &&
+                sameNamedProduct.getProductId() != productId) {
+            throw new APIException("Product with same name '" + sameNamedProduct.getProductName() + "' exists");
+        }
+
+        // check product existence with id
+        Product existingProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+
+        if (newProduct.getProductName() != null) {
+            existingProduct.setProductName(newProduct.getProductName());
+        }
+        if (newProduct.getProductPrice() != null) {
+            existingProduct.setProductPrice(newProduct.getProductPrice());
+            calculateSpecialPrice = true;
+        }
+        if (newProduct.getProductDiscount() != null) {
+            existingProduct.setProductDiscount(newProduct.getProductDiscount());
+            calculateSpecialPrice = true;
+        }
+        if (newProduct.getProductDescription() != null) {
+            existingProduct.setProductDescription(newProduct.getProductDescription());
+        }
+        if (newProduct.getProductImage() != null) {
+            existingProduct.setProductImage(newProduct.getProductImage());
+        }
+        if (newProduct.getProductQuantity() != null) {
+            existingProduct.setProductQuantity(newProduct.getProductQuantity());
+        }
+
+        if (calculateSpecialPrice) {
+
+            double special_Price = existingProduct.getProductPrice() - (existingProduct.getProductPrice() * existingProduct.getProductDiscount() * 0.01);
+
+            existingProduct.setProductSpecialPrice(special_Price);
+        }
+
+        Product savedProduct = productRepository.save(existingProduct);
+
+        return modelMapper.map(savedProduct, ProductDTO.class);
+    }
+
+    @Override
+    public ProductDTO deleteProduct(Long productId) {
+        Product existingProduct = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+
+        productRepository.delete(existingProduct);
+
+        return modelMapper.map(existingProduct, ProductDTO.class);
     }
 }

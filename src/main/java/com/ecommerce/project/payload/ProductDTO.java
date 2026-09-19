@@ -35,4 +35,19 @@ public class ProductDTO {
     private Double productSpecialPrice;
 
     private Category category;
+
+    @Override
+    public String toString() {
+        return "ProductDTO{" +
+                "productId=" + productId +
+                ", productName='" + productName + '\'' +
+                ", productDescription='" + productDescription + '\'' +
+                ", productQuantity=" + productQuantity +
+                ", productPrice=" + productPrice +
+                ", productImage='" + productImage + '\'' +
+                ", productDiscount=" + productDiscount +
+                ", productSpecialPrice=" + productSpecialPrice +
+                ", category=" + category +
+                '}';
+    }
 }

@@ -1,10 +1,9 @@
 package com.ecommerce.project.controller;
 
-import com.ecommerce.project.exception.APIException;
-import com.ecommerce.project.model.Product;
+
+import com.ecommerce.project.payload.APIResposne;
 import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
-import com.ecommerce.project.repository.ProductRepository;
 import com.ecommerce.project.service.ProductService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -55,6 +53,27 @@ public class ProductController {
 
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
 
+    }
+
+    @PutMapping("/admin/products/{productId}")
+    public ResponseEntity<APIResposne> updateProduct(@PathVariable Long productId,
+                                                     @RequestBody ProductDTO
+                                                             productDTO){
+
+        ProductDTO updatedProduct = productService.updateProduct(productDTO, productId);
+        APIResposne apiResposne = new APIResposne("Updated successfully!",
+                updatedProduct.toString(), true);
+
+
+        return  new ResponseEntity<>(apiResposne, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admin/products/{productId}")
+    public ResponseEntity<APIResposne> deleteProduct(@PathVariable Long productId){
+
+        ProductDTO deletedProduct = productService.deleteProduct(productId);
+        APIResposne apiResposne = new APIResposne("Deleted Successfully!", deletedProduct.toString(), true);
+        return new ResponseEntity<>(apiResposne, HttpStatus.OK);
     }
 
 }

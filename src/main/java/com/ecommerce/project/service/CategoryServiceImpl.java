@@ -91,6 +91,8 @@ public class CategoryServiceImpl implements CategoryService {
 
         // check for same name category
         Category sameNamedCategory = categoryRepository.findByCategoryName(category.getCategoryName());
+
+        // you can't update another category which already exists.
         if(sameNamedCategory != null &&
                 !Objects.equals(sameNamedCategory.getCategoryId(), id)){
             throw new APIException("Category exists with same name ::"+sameNamedCategory.getCategoryName());
