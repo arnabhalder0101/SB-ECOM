@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @RestController
@@ -58,22 +61,31 @@ public class ProductController {
     @PutMapping("/admin/products/{productId}")
     public ResponseEntity<APIResposne> updateProduct(@PathVariable Long productId,
                                                      @RequestBody ProductDTO
-                                                             productDTO){
+                                                             productDTO) {
 
         ProductDTO updatedProduct = productService.updateProduct(productDTO, productId);
         APIResposne apiResposne = new APIResposne("Updated successfully!",
                 updatedProduct.toString(), true);
 
 
-        return  new ResponseEntity<>(apiResposne, HttpStatus.OK);
+        return new ResponseEntity<>(apiResposne, HttpStatus.OK);
     }
 
     @DeleteMapping("/admin/products/{productId}")
-    public ResponseEntity<APIResposne> deleteProduct(@PathVariable Long productId){
+    public ResponseEntity<APIResposne> deleteProduct(@PathVariable Long productId) {
 
         ProductDTO deletedProduct = productService.deleteProduct(productId);
         APIResposne apiResposne = new APIResposne("Deleted Successfully!", deletedProduct.toString(), true);
         return new ResponseEntity<>(apiResposne, HttpStatus.OK);
     }
+
+    @PutMapping("/admin/products/{productId}/image")
+    public ResponseEntity<ProductDTO> updateProductImage(@PathVariable Long productId, @RequestParam(name = "image") MultipartFile image) throws IOException {
+
+        ProductDTO updatedProduct = productService.updateProductImage(productId, image);
+
+        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    }
+
 
 }
