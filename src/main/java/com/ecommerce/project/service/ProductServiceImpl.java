@@ -11,15 +11,15 @@ import com.ecommerce.project.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -40,14 +40,27 @@ public class ProductServiceImpl implements ProductService {
     String path = "images/";
 
     @Override
-    public ProductResponse getAllProducts() {
-        List<ProductDTO> productDTOS = productRepository.findAll()
+    public ProductResponse getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+
+        // pagination and sorting impl
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+
+        Pageable pageDetails= PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Product> productPage = productRepository.findAll(pageDetails);
+
+        List<ProductDTO> productDTOS = productPage
                 .stream()
                 .map(p -> modelMapper.map(p, ProductDTO.class))
                 .toList();
 
         ProductResponse productResponse = new ProductResponse();
         productResponse.setContent(productDTOS);
+        productResponse.setPageNumber(productPage.getNumber());
+        productResponse.setPageSize(productPage.getSize());
+        productResponse.setTotalPages(productPage.getTotalPages());
+        productResponse.setTotalElements(productPage.getTotalElements());
+        productResponse.setLastPage(productPage.isLast());
 
 
         return productResponse;
@@ -76,40 +89,60 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse getProductByCategory(Long categoryId) {
+    public ProductResponse getProductByCategory(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-        //List<Product> products = productRepository.findAllByCategoryId(categoryId);
+        // pagination and sorting impl
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageDetails= PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("category", "ID", categoryId));
-        List<Product> products = productRepository.findByCategory(category);
 
-        if (products == null) {
+        Page<Product> productPage = productRepository.findByCategory(category, pageDetails);
+
+        if (productPage == null) {
             throw new ResourceNotFoundException("Product", "category ID", categoryId);
         }
 
-        List<ProductDTO> productDTOS = products.stream()
+        List<ProductDTO> productDTOS = productPage.stream()
                 .map(p -> modelMapper.map(p, ProductDTO.class)).toList();
 
         ProductResponse pr = new ProductResponse();
+
         pr.setContent(productDTOS);
+        pr.setPageNumber(productPage.getNumber());
+        pr.setPageSize(productPage.getSize());
+        pr.setTotalPages(productPage.getTotalPages());
+        pr.setTotalElements(productPage.getTotalElements());
+        pr.setLastPage(productPage.isLast());
 
         return pr;
     }
 
     @Override
-    public ProductResponse getProductByKeyword(String keyword) {
+    public ProductResponse getProductByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
 
-        List<Product> products = productRepository.findByProductNameContainingIgnoreCase(keyword);
+        // pagination and sorting impl
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageDetails= PageRequest.of(pageNumber, pageSize, sortByAndOrder);
 
-        if (products == null) {
+        Page<Product> productPage = productRepository.findByProductNameContainingIgnoreCase(keyword, pageDetails);
+
+        if (productPage == null) {
             throw new ResourceNotFoundException("Product", "keyword", keyword);
         }
 
-        List<ProductDTO> productDTOS = products.stream()
+        List<ProductDTO> productDTOS = productPage.stream()
                 .map(p -> modelMapper.map(p, ProductDTO.class)).toList();
 
         ProductResponse pr = new ProductResponse();
+
         pr.setContent(productDTOS);
+        pr.setPageNumber(productPage.getNumber());
+        pr.setPageSize(productPage.getSize());
+        pr.setTotalPages(productPage.getTotalPages());
+        pr.setTotalElements(productPage.getTotalElements());
+        pr.setLastPage(productPage.isLast());
 
         return pr;
     }
@@ -162,6 +195,22 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(existingProduct);
 
         return modelMapper.map(savedProduct, ProductDTO.class);
+    }
+
+    @Override
+    public ProductDTO updateProductCategory( Long productId, Long categoryId) {
+
+        Product existingProduct = productRepository.findById(productId)
+                .orElseThrow(()-> new ResourceNotFoundException("Product", "productId", productId));
+
+        Category newCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+
+        existingProduct.setCategory(newCategory);
+
+        Product updatedProduct = productRepository.save(existingProduct);
+
+        return modelMapper.map(updatedProduct, ProductDTO.class);
     }
 
     @Override

@@ -43,7 +43,7 @@ public class CategoryController {
 
         APIResposne apiResposne = new APIResposne(
                 "Category Created Successfully.",
-                savedCategory.toString(),
+                savedCategory,
                 true);
 
 
