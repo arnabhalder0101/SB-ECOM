@@ -1,0 +1,25 @@
+info:
+  name: hosted
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: https://sb-ecom-8vsb.onrender.com/api/public/category
+  body:
+    type: json
+    data: "{\r
+
+      \    \"categoryDescription\":\"Desktop Accessories products\",\r
+
+      \    \"categoryName\": \"Desktop Accessories\"\r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

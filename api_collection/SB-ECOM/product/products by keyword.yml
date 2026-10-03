@@ -1,0 +1,35 @@
+info:
+  name: products by keyword
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: http://localhost:8080/api/public/products/keyword?keyword=mou&pageNumber=0&pageSize=2&sortBy=productName&sortOrder=asc
+  params:
+    - name: keyword
+      value: mou
+      type: query
+    - name: pageNumber
+      value: "0"
+      type: query
+    - name: pageSize
+      value: "2"
+      type: query
+    - name: sortBy
+      value: productName
+      type: query
+    - name: sortOrder
+      value: asc
+      type: query
+  body:
+    type: json
+    data: ""
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

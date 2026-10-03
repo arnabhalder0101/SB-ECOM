@@ -38,6 +38,9 @@ public class Product {
 
     private Double productSpecialPrice;
 
+    // JoinColumn will add a new field in the product table for this ManyToOne Relationship
+    // refer Readme.md
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

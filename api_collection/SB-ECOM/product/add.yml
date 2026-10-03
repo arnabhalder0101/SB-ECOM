@@ -1,0 +1,25 @@
+info:
+  name: add
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/api/admin/categories/2/product
+  body:
+    type: json
+    data: |-
+      {
+        "productName": "Vivo T4x 5G Phone",
+        "productPrice": 25000,
+        "productQuantity": 5,
+        "productDiscount": 10
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

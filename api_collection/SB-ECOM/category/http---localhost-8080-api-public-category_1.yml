@@ -1,0 +1,25 @@
+info:
+  name: http://localhost:8080/api/public/category_1
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8080/api/public/category
+  body:
+    type: json
+    data: "{\r
+
+      \    \"categoryDescription\":\"DEMO\",\r
+
+      \    \"categoryName\": \"DEMO CATEGORY\"\r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

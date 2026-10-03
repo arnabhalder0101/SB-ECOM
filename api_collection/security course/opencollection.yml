@@ -1,0 +1,17 @@
+opencollection: 1.0.0
+
+info:
+  name: security course
+
+request:
+  variables:
+    - name: bearer_token_07is
+      value: ""
+    - name: json_web_token_02j9
+      value: ""
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git

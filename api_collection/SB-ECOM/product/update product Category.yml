@@ -1,0 +1,23 @@
+info:
+  name: update product Category
+  type: http
+  seq: 6
+
+http:
+  method: PUT
+  url: http://localhost:8080/api/admin/products/category/21?categoryId=1
+  params:
+    - name: categoryId
+      value: "1"
+      type: query
+  body:
+    type: json
+    data: ""
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

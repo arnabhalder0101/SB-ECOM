@@ -1,0 +1,30 @@
+info:
+  name: update product
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: http://localhost:8080/api/admin/products/21
+  params:
+    - name: keyword
+      value: key
+      type: query
+      disabled: true
+  body:
+    type: json
+    data: "{\r
+
+      \    \"productName\": \"Vivo T4x 5G Phone\"\r
+
+      \    \r
+
+      }"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
