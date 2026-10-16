@@ -63,4 +63,16 @@ public class User {
     @JoinTable(name="user_address", joinColumns = @JoinColumn(name="user_id"),
         inverseJoinColumns = @JoinColumn(name = "address_id"))
     private Set<Address> addresses = new HashSet<>();
+
+
+    // Because you specified mappedBy = "user" inside the User class,
+    // Hibernate looks specifically for a field named user in the Product entity.
+    @Getter
+    @Setter
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user", // field name
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+            ,orphanRemoval = true)
+    private Set<Product> products= new HashSet<>();
 }

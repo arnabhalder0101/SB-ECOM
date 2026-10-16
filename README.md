@@ -38,3 +38,53 @@ users table             user_role (Bridge Table)            roles table
 +---------+----------+  |    2    |   101   |               +---------+-----------+
                         +---------+---------+
 Notice that users still only has user_id, user_name, email, and password. It contains no role_id column.
+
+
++++++++++++++++++++
+Q. why add set<T> var; in user entity??
+
+
+Database View vs. Java View
+In the Database (SQL):
+There is no column in the users table for products. The link lives entirely inside the product table via the user_id foreign key.
+
+In Java (Object Model):
+If you only had @ManyToOne in Product, you could easily ask:
+
+Java
+product.getUser(); // Works!
+However, you could not do this from a user object:
+
+Java
+user.getProducts(); // Impossible without Set<Product> products!
+Adding Set<Product> products makes the relationship bidirectional, allowing you to navigate from a User to their catalog of items directly in Java.
+
+
++++++++++
+
+Java
+@OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)
+private Set<Product> products;
+What mappedBy = "user" tells Hibernate:
+"I do not own this foreign key." It informs Hibernate: "Do not create an extra join table or column in users. Look at the user field inside the Product class to see how we are joined."
+
+Product is the owning side: The product table holds the real SQL column (user_id). Hibernate monitors the product.setUser(...) call when deciding what to write into the database column.
+
+3. What Hibernate Executes Under the Hood
+   When you fetch a user and access their products:
+
+Java
+User seller = userRepository.findById(1L).get();
+Set<Product> items = seller.getProducts();
+Hibernate translates seller.getProducts() into this SQL query:
+
+
+
++++++++
+Summary Checklist
+
+Side,  Entity,Annotation,Has Physical Column?,Purpose
+Owner,  Product,"@ManyToOne + @JoinColumn(name=""user_id"")",Yes (user_id in product),Maintains the SQL foreign key
+Inverse,  User,"@OneToMany(mappedBy=""user"")",No,Allows calling user.getProducts()
+
+

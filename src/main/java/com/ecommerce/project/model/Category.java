@@ -3,9 +3,9 @@ package com.ecommerce.project.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +24,14 @@ public class Category {
 
     @Size(max=300, message = "description must be 5 char to 300")
     private String categoryDescription;
+
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "category", // do not create 3rd bridge table, refer Product entity with "category" field name
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
+            ,orphanRemoval = true)
+    private Set<Product> products;
 
 //    public String getCategoryDescription() {
 //        return categoryDescription;

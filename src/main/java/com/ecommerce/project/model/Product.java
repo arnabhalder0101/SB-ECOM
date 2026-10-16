@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "product")
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -44,6 +43,12 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    // we'll store the seller's seller_id (user) associated with product;
+    @ManyToOne
+    @JoinColumn(name= "seller_id",
+            referencedColumnName = "user_id")
+    private  User user;
 
 
 }
