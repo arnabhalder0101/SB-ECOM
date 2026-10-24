@@ -1,0 +1,29 @@
+git switch -c new-branch  // git checkout -b new-branch
+git switch new-branch   // git checkout new-branch
+
+-- rename branch
+git branch -m new-name
+
+-- push new created branchs 
+git push -u origin new-branch
+
+
+
+--- in new folder git clone (this works as well but keeps *main branch as well)
++++++++++++++++++++++++++++
+git clone <url>
+git init
+git remote add origin <url>
+git fetch
+git pull origin branch-name
+git switch branch-name
+git branch  
+
+
+-- only new branch no *main
++++++++++++++++++++++++++++
+git init
+git remote add origin <url>
+git fetch origin
+git switch new-branch
+git branch
