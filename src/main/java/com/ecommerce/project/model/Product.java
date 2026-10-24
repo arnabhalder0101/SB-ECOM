@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long productId;
+    private Long productId;
 
     @NotBlank(message = "Product name must not be blank")
     @Size(min=2, max = 40, message = "min length is 5 max is 20")
