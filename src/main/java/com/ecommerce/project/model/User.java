@@ -27,12 +27,12 @@ public class User {
     private Long userId;
 
     @NotNull
-    @Size(min=10)
+    @Size(min=3, max= 10, message = "username must be between 3 to 10 char")
     @Column(name = "user_name")
     private String userName;
 
     @Email
-    @Size(min=15, message = "email must be of min 15 char")
+    @Size(min=5, message = "email must be of min 5 char")
     @NotBlank
     @Column(name = "email")
     private String email;

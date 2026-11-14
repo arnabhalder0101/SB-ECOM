@@ -45,7 +45,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 logger.debug("Roles from JWT: {}", userDetails.getAuthorities());
             }
 
-
         } catch (Exception e) {
             logger.error("Cannot set user authentication: {}", e);
         }
@@ -56,7 +55,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String jwt = jwtUtils.getJwtfromHeaders(request);
+        String jwt = jwtUtils.getJwtFromCookies(request);
         logger.debug("Auth token filter.java: {}", jwt);
         return jwt;
     }
