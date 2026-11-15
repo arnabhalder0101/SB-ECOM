@@ -14,17 +14,17 @@ import java.util.Set;
 @AllArgsConstructor
 public class SignupRequest {
 
-    @NotBlank
-    @Size(min=3, max=20)
+    @NotBlank(message = "username must not be blank")
+    @Size(min=3, max= 10, message = "username must be between 3 to 10 char")
     private String username;
 
-    @NotBlank
-    @Size(min = 5, max = 30)
     @Email
+    @NotBlank(message = "email must not be blank")
+    @Size(min=5, message = "email must be of min 5 char")
     private String email;
 
-    @NotBlank
-    @Size(min = 6, max=10)
+    @NotBlank(message = "password must not be blank")
+    @Size(min=5, message = "password must be of min 5 char")
     private String password;
 
     private Set<String> role;
