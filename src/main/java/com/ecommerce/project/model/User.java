@@ -26,19 +26,19 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-    @NotNull
-    @Size(min=10)
+    @NotBlank(message = "username must not be blank")
+    @Size(min=3, message = "username must be min 3 character")
     @Column(name = "user_name")
     private String userName;
 
     @Email
-    @Size(min=15, message = "email must be of min 15 char")
-    @NotBlank
+    @Size(min=5, message = "email must be of min 5 char")
+    @NotBlank(message = "email must not be blank")
     @Column(name = "email")
     private String email;
 
     @Size(min=5, message = "password must be of min 5 char")
-    @NotBlank
+    @NotBlank(message = "password must not be blank")
     @Column(name = "password")
     private String password;
 
