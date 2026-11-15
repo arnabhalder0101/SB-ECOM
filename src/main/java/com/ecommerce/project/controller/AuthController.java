@@ -24,10 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -48,7 +45,7 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication;
 
@@ -143,6 +140,28 @@ public class AuthController {
         user.setRoles(roles);
         userRepository.save(user);
         return new ResponseEntity<>(new MessageResponse("User Registered Successfully"), HttpStatus.CREATED);
+
+    }
+
+    @GetMapping("/username")
+    public String getAuthenticatedUsername(Authentication authentication){
+        if(authentication != null){
+            return authentication.getName();
+        }
+        return "nA";
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserInfoResponse> getAuthenticatedUserDetails(Authentication authentication){
+        UserDetailsImpl userdetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        List<String> roles = userdetails.getAuthorities().stream()
+                .map(r -> r.getAuthority())
+                .toList();
+
+
+        return ResponseEntity.ok()
+                .body(new UserInfoResponse(userdetails.getId(), userdetails.getUsername(), roles ));
 
     }
 }
