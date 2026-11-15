@@ -88,12 +88,12 @@ public class AuthController {
     }
 
     @PostMapping("/signout")
-    public ResponseEntity<String> signOutUser(){
+    public ResponseEntity<MessageResponse> signOutUser(){
 
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body("You've been logged out");
+                .body(new MessageResponse("You've been logged out"));
     }
 
     @PostMapping("/signup")
@@ -154,11 +154,11 @@ public class AuthController {
     }
 
     @GetMapping("/username")
-    public String getAuthenticatedUsername(Authentication authentication){
+    public ResponseEntity<MessageResponse> getAuthenticatedUsername(Authentication authentication){
         if(authentication != null){
-            return authentication.getName();
+            return  ResponseEntity.ok().body(new MessageResponse(authentication.getName())) ;
         }
-        return "nA";
+        return ResponseEntity.status(404).body(new MessageResponse("N/A")) ;
     }
 
     @GetMapping("/user")
