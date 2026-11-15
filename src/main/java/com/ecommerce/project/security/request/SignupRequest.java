@@ -15,7 +15,7 @@ import java.util.Set;
 public class SignupRequest {
 
     @NotBlank(message = "username must not be blank")
-    @Size(min=3, max= 10, message = "username must be between 3 to 10 char")
+    @Size(min=3, message = "username must be min 3 character")
     private String username;
 
     @Email

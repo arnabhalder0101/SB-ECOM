@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
 
     @NotBlank(message = "username must not be blank")
-    @Size(min=3, max= 15, message = "username must be between 3 to 10 char")
+    @Size(min=3, message = "username must be min 3 character")
     private String username;
 
     @NotBlank(message = "password must not be blank")
