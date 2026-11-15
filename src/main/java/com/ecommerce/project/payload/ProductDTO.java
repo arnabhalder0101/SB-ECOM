@@ -34,7 +34,7 @@ public class ProductDTO {
 
     private Double productSpecialPrice;
 
-    private Category category;
+    private CategoryDTO category;
 
     @Override
     public String toString() {
