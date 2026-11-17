@@ -75,4 +75,10 @@ public class User {
             cascade = {CascadeType.MERGE, CascadeType.PERSIST}
             ,orphanRemoval = true)
     private Set<Product> products= new HashSet<>();
+
+    // Even though it's optional, adding private Cart cart; to your User model gives you a huge convenience: navigation from User to Cart. --> user.getCart()
+
+    @ToString.Exclude
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private Cart cart;
 }
