@@ -49,11 +49,24 @@ public class CartServiceImpl implements CartService {
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(productId, cart.getCartId());
 
         if (cartItem != null) {
-            throw new APIException("Product " + product.getProductName() + " already exists in cart");
+//            throw new APIException("Product " + product.getProductName() + " already exists in cart");
             /*
             CR: if alredy exists, and quantity is available in stock
                 then increase cartItem quantity.
             */
+            if (product.getProductQuantity() > quantity) {
+                cartItem.setQuantity(cartItem.getQuantity() + quantity);
+                cartItemRepository.save(cartItem);
+
+                cart.setTotalPrice(cart.getTotalPrice() + product.getProductSpecialPrice() * quantity);
+
+                cartRepository.save(cart);
+            }
+
+
+            return modelMapper.map(cart, CartDTO.class);
+
+
         }
         if (product.getProductQuantity() == 0) {
             throw new APIException("Product " + product.getProductName() + " is not available/Out of Stock");
@@ -75,10 +88,11 @@ public class CartServiceImpl implements CartService {
 
         cart.setTotalPrice(cart.getTotalPrice() + newCartItem.getProductPrice() * quantity);
 
-        List<CartItem> cis = cart.getCartItem();
-        cis.add(cartItem);
+        List<CartItem> cartCartItems = cart.getCartItems();
+        cartCartItems.add(newCartItem);
 
-        cart.setCartItem(cis);
+        cart.setCartItems(cartCartItems);
+        System.out.println("LOGG::\n\n" + cartCartItems.size());
 
         cartRepository.save(cart);
         //return updated Cart

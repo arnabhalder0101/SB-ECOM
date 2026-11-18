@@ -29,7 +29,7 @@ public class Cart {
     @OneToMany(mappedBy = "cart",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE},
             orphanRemoval = true)
-    private List<CartItem> cartItem = new ArrayList<>();
+    private List<CartItem> cartItems = new ArrayList<>();
 
     private double totalPrice = 0.0;
 
