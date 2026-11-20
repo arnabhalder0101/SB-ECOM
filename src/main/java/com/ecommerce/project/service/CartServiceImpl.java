@@ -12,6 +12,7 @@ import com.ecommerce.project.repository.ProductRepository;
 import com.ecommerce.project.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -113,6 +114,16 @@ public class CartServiceImpl implements CartService {
                 .toList();
 
         return cartDTOs;
+    }
+
+    @Override
+    public CartDTO getCart(String emailId, Long cartId) {
+        Cart cart = cartRepository.findCartByEmailAndCartId(emailId, cartId);
+
+        if(cart == null){
+            throw new ResourceNotFoundException("Cart", "cartId", cartId);
+        }
+        return modelMapper.map(cart, CartDTO.class);
     }
 
     private Cart createCart() {
