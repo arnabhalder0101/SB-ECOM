@@ -1,0 +1,23 @@
+info:
+  name: /signin
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: https://sb-ecom-8vsb.onrender.com/api/auth/signin
+  body:
+    type: json
+    data: |-
+      {
+          "username": "user1",
+          "password": "password1"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

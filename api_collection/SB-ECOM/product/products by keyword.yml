@@ -5,16 +5,16 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/api/public/products/keyword?keyword=mou&pageNumber=0&pageSize=2&sortBy=productName&sortOrder=asc
+  url: http://localhost:8080/api/public/products/keyword?keyword=vivo&pageNumber=0&pageSize=10&sortBy=productName&sortOrder=asc
   params:
     - name: keyword
-      value: mou
+      value: vivo
       type: query
     - name: pageNumber
       value: "0"
       type: query
     - name: pageSize
-      value: "2"
+      value: "10"
       type: query
     - name: sortBy
       value: productName

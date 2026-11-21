@@ -1,0 +1,16 @@
+info:
+  name: /signout
+  type: http
+  seq: 9
+
+http:
+  method: POST
+  url: https://sb-ecom-8vsb.onrender.com/api/auth/signout
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

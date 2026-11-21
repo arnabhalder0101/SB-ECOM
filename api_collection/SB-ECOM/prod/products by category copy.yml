@@ -1,11 +1,11 @@
 info:
-  name: hosted_1
+  name: products by category copy
   type: http
-  seq: 6
+  seq: 4
 
 http:
   method: GET
-  url: https://sb-ecom-8vsb.onrender.com/api/public/category?pageNumber=0&pageSize=10&sortBy=categoryName&sortOrder=desc
+  url: https://sb-ecom-8vsb.onrender.com/api/public/categories/1/product?pageNumber=0&pageSize=10&sortBy=productName&sortOrder=asc
   params:
     - name: pageNumber
       value: "0"
@@ -14,11 +14,14 @@ http:
       value: "10"
       type: query
     - name: sortBy
-      value: categoryName
+      value: productName
       type: query
     - name: sortOrder
-      value: desc
+      value: asc
       type: query
+  body:
+    type: json
+    data: ""
   auth: inherit
 
 settings:

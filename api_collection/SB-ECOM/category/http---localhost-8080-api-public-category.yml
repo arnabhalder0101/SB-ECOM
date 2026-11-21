@@ -21,7 +21,6 @@ http:
       value: desc
       type: query
       disabled: true
-  auth: inherit
 
 settings:
   encodeUrl: true

@@ -1,0 +1,25 @@
+info:
+  name: /product
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: https://sb-ecom-8vsb.onrender.com/api/admin/categories/1/product
+  body:
+    type: json
+    data: |-
+      {
+        "productName": "Logitech Mouse wireless",
+        "productPrice": 3000,
+        "productQuantity": 20,
+        "productDiscount": 80
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
