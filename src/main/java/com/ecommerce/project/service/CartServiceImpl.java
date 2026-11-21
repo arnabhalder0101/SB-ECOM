@@ -9,10 +9,14 @@ import com.ecommerce.project.payload.CartDTO;
 import com.ecommerce.project.repository.CartItemRepository;
 import com.ecommerce.project.repository.CartRepository;
 import com.ecommerce.project.repository.ProductRepository;
+import com.ecommerce.project.security.services.UserDetailsImpl;
 import com.ecommerce.project.util.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -124,6 +128,41 @@ public class CartServiceImpl implements CartService {
             throw new ResourceNotFoundException("Cart", "cartId", cartId);
         }
         return modelMapper.map(cart, CartDTO.class);
+    }
+
+    @Override
+    public CartDTO updateProductQuantityInCart(Long productId, int operation) {
+
+        String email = authUtil.loggedInEmail();
+        CartItem cartItem = cartItemRepository.findCartByEmailAndProductId(email, productId);
+
+        if(cartItem== null){
+            throw new ResourceNotFoundException("Product", "productId", productId);
+        }
+
+        if(cartItem.getQuantity()>0) {
+            cartItem.setQuantity(cartItem.getQuantity() + operation);
+        }
+
+        CartItem savedCartItem = cartItemRepository.save(cartItem);
+
+        Cart cart = cartRepository.findCartByEmailAndCartId(email, savedCartItem.getCart().getCartId());
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product", "productId", productId));
+
+        if(operation>0)
+            cart.setTotalPrice(cart.getTotalPrice() + product.getProductSpecialPrice());
+        else
+            cart.setTotalPrice(cart.getTotalPrice() - product.getProductSpecialPrice());
+
+        Cart dbCart = cartRepository.save(cart);
+
+        if(cartItem.getQuantity() == 0){
+            cartItemRepository.delete(cartItem);
+        }
+
+        return modelMapper.map(dbCart, CartDTO.class);
     }
 
     private Cart createCart() {
