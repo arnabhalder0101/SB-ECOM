@@ -1,18 +1,16 @@
 package com.ecommerce.project.controller;
 
 import com.ecommerce.project.exception.APIException;
-import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.Cart;
+import com.ecommerce.project.payload.AllCartsDTO;
 import com.ecommerce.project.payload.CartDTO;
 import com.ecommerce.project.repository.CartRepository;
-import com.ecommerce.project.security.services.UserDetailsImpl;
 import com.ecommerce.project.service.CartService;
 import com.ecommerce.project.util.AuthUtil;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,16 +19,17 @@ import java.util.List;
 @RequestMapping("/api")
 public class CartController {
 
-
     private AuthUtil authUtil;
     private CartRepository cartRepository;
     private CartService cartService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public CartController(CartService cartService, CartRepository cartRepository, AuthUtil authUtil){
+    public CartController(CartService cartService, CartRepository cartRepository, AuthUtil authUtil, ModelMapper modelMapper){
         this.cartService = cartService;
         this.cartRepository = cartRepository;
         this.authUtil = authUtil;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/carts/product/{productId}/quantity/{quantity}")
@@ -42,11 +41,16 @@ public class CartController {
     }
 
     @GetMapping("/carts/all")
-    public ResponseEntity<List<CartDTO>> getCarts(){
+    public ResponseEntity<AllCartsDTO> getCarts(){
 
         List<CartDTO> cartDTOS = cartService.getAllCarts();
 
-        return new ResponseEntity<>(cartDTOS, HttpStatus.OK);
+        AllCartsDTO allCartsDTO= new AllCartsDTO();
+        allCartsDTO.setCarts(cartDTOS);
+        allCartsDTO.setCount(cartDTOS.size());
+        allCartsDTO.setTotalCartsValue(cartDTOS.stream().mapToDouble(cart -> cart.getTotalPrice()).sum());
+
+        return new ResponseEntity<>(allCartsDTO, HttpStatus.OK);
 
     }
 

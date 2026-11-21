@@ -30,6 +30,7 @@ public class ProductDTO {
 
     private String productImage;
 
+    @NotNull(message = "Discount must be filled")
     private Double productDiscount;
 
     private Double productSpecialPrice;

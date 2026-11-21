@@ -36,6 +36,7 @@ public class Product {
 
     private String productImage;
 
+    @NotNull(message = "Discount must be filled")
     private Double productDiscount;
 
     private Double productSpecialPrice;
