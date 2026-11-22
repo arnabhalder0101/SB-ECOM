@@ -82,4 +82,13 @@ public class CartController {
         return ResponseEntity.ok().body(cartDTO);
 
     }
+
+    @DeleteMapping("/cart/{cartId}/product/{productId}")
+    public ResponseEntity<CartDTO> deleteProductFromCart(
+            @PathVariable Long cartId,
+            @PathVariable Long productId
+    ){
+        CartDTO cartDTO = cartService.deleteProductFromCart(cartId, productId);
+        return ResponseEntity.ok().body(cartDTO);
+    }
 }

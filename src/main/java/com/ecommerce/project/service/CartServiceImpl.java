@@ -209,6 +209,32 @@ public class CartServiceImpl implements CartService {
 //        return modelMapper.map(dbCart, CartDTO.class);
     }
 
+    @Transactional
+    @Override
+    public CartDTO deleteProductFromCart(Long cartId, Long productId) {
+        String email = authUtil.loggedInEmail();
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Product", "productId", productId));
+
+        Cart cart = cartRepository.findCartByEmail(email);
+        if(cart == null){
+            throw new ResourceNotFoundException("Cart", "user emailId", email);
+        }
+
+        CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(productId, cartId);
+        if(cartItem == null){
+            throw  new APIException("CartItem " + product.getProductName()+ " not exists in the Cart");
+        }
+
+        cart.setTotalPrice(cart.getTotalPrice() - (cartItem.getQuantity() * cartItem.getProductPrice()));
+        cartItemRepository.deleteCartItemByCartIdAndProductId(cartId, productId);
+
+        // send a copy of updated cart
+        Cart newCart = cartRepository.save(cart);
+        return modelMapper.map(newCart, CartDTO.class);
+    }
+
     private Cart createCart() {
         Cart existingCart = cartRepository.findCartByEmail(authUtil.loggedInEmail());
         if (existingCart == null) {
