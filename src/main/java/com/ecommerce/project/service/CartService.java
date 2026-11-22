@@ -1,6 +1,7 @@
 package com.ecommerce.project.service;
 
 import com.ecommerce.project.payload.CartDTO;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -11,5 +12,6 @@ public interface CartService {
 
     CartDTO getCart(String emailId, Long cartId);
 
-    CartDTO updateProductQuantityInCart(Long productId, int operation);
+    @Transactional
+    CartDTO updateProductQuantityInCart(Long productId, Integer quantity);
 }
