@@ -1,20 +1,18 @@
 info:
-  name: hosted
+  name: /category
   type: http
-  seq: 5
+  seq: 1
 
 http:
   method: POST
   url: https://sb-ecom-8vsb.onrender.com/api/public/category
   body:
     type: json
-    data: "{\r
-
-      \    \"categoryDescription\":\"Desktop Accessories products\",\r
-
-      \    \"categoryName\": \"Desktop Accessories\"\r
-
-      }"
+    data: |-
+      {
+          "categoryDescription":"Utensils",
+          "categoryName": "House hold items"
+      }
   auth: inherit
 
 settings:

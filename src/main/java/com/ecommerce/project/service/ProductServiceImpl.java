@@ -77,6 +77,8 @@ public class ProductServiceImpl implements ProductService {
         if (product.getProductDiscount() != null) {
             double special_price = product.getProductPrice() - product.getProductPrice() * (product.getProductDiscount() * 0.01);
             product.setProductSpecialPrice(special_price);
+        }else{
+            product.setProductSpecialPrice(product.getProductPrice());
         }
         Product sameNamedProduct = productRepository.findByProductName(product.getProductName());
         if (sameNamedProduct != null) {
