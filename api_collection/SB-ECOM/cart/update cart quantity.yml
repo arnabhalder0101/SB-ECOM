@@ -1,11 +1,11 @@
 info:
   name: update cart quantity
   type: http
-  seq: 4
+  seq: 2
 
 http:
   method: PUT
-  url: localhost:8080/api/cart/product/2/quantity/add
+  url: localhost:8080/api/cart/product/1/quantity/add
   auth: inherit
 
 settings:

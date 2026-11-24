@@ -10,8 +10,8 @@ http:
     type: json
     data: |-
       {
-        "productName": "Logitech Mouse wireless",
-        "productPrice": 3000,
+        "productName": "Logitech keyboard Wired",
+        "productPrice": 3599.99,
         "productQuantity": 20,
         "productDiscount": 80
       }

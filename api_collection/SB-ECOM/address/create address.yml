@@ -1,0 +1,27 @@
+info:
+  name: create address
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: localhost:8080/api/address
+  body:
+    type: json
+    data: |-
+      {
+        "streetName": "Abudaiyan Basirhat",
+        "landmark": "Kali Temple",
+        "pinCode": "700030",
+        "stateName": "WB",
+        "cityName": "BSHT",
+        "countryName": "IN"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

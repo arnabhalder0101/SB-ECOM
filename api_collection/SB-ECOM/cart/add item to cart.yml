@@ -1,11 +1,11 @@
 info:
   name: add item to cart
   type: http
-  seq: 5
+  seq: 3
 
 http:
   method: POST
-  url: localhost:8080/api/carts/product/2/quantity/1
+  url: localhost:8080/api/carts/product/1/quantity/2
   auth: inherit
 
 settings:
