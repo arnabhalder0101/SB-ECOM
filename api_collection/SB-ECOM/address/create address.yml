@@ -8,15 +8,15 @@ http:
   url: localhost:8080/api/address
   body:
     type: json
-    data: |-
-      {
-        "streetName": "Abudaiyan Basirhat",
-        "landmark": "Kali Temple",
-        "pinCode": "700030",
-        "stateName": "WB",
-        "cityName": "BSHT",
-        "countryName": "IN"
-      }
+    data: |2-
+       {
+          "streetName": "Unter den Linden 77",
+          "landmark": "Near Brandenburg Gate",
+          "pinCode": "101173",
+          "stateName": "Mexico",
+          "cityName": "Mexico city",
+          "countryName": "Mexico"
+        }
   auth: inherit
 
 settings:

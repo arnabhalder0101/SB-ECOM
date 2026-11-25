@@ -52,10 +52,14 @@ public class Address {
     @Size(min = 2, message = "Country name must be at least 2 characters")
     private String countryName;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "addresses"
-    , cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<User> user = new ArrayList<>();
+//    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
+//    @ManyToMany(mappedBy = "addresses"
+//    , cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+//    private List<User> user = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

@@ -1,0 +1,27 @@
+info:
+  name: update Address
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: localhost:8080/api/address/8
+  body:
+    type: json
+    data: |-
+      {
+        "streetName": "Unter den Linden 77",
+        "landmark": "Near Brandenburg Gate",
+        "pinCode": "101173",
+        "stateName": "Canadian State",
+        "cityName": "Toronto",
+        "countryName": "Canada"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
