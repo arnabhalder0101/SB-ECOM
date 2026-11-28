@@ -10,7 +10,7 @@ http:
     type: json
     data: |2-
        {
-          "streetName": "Unter den Linden 77",
+          "streetName": "Test 2",
           "landmark": "Near Brandenburg Gate",
           "pinCode": "101173",
           "stateName": "Mexico",

@@ -5,12 +5,12 @@ info:
 
 http:
   method: PUT
-  url: localhost:8080/api/address/8
+  url: localhost:8080/api/address/10
   body:
     type: json
     data: |-
       {
-        "streetName": "Unter den Linden 77",
+        "streetName": "Updated Streat Name Test",
         "landmark": "Near Brandenburg Gate",
         "pinCode": "101173",
         "stateName": "Canadian State",

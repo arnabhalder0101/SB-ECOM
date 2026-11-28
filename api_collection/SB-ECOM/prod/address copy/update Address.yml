@@ -1,0 +1,27 @@
+info:
+  name: update Address
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: https://sb-ecom-8vsb.onrender.com/api/address/1
+  body:
+    type: json
+    data: |-
+      {
+          "streetName": "75 Kushti Akhada Lane",
+          "landmark": "Near Pehelwanpur Wrestling Ground",
+          "pinCode": "302015",
+          "stateName": "Rajasthan",
+          "cityName": "Pehelwanpur",
+          "countryName": "India"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

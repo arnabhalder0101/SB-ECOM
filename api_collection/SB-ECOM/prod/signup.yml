@@ -10,8 +10,8 @@ http:
     type: json
     data: |-
       {
-          "username": "6296790017",
-          "email": "6296790017@ecomm.com",
+          "username": "8348754375",
+          "email": "8348754375@ecomm.com",
           "password": "adminPassword",
           "role": [ "user", "admin", "seller"]
       }

@@ -1,0 +1,27 @@
+info:
+  name: create address
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: https://sb-ecom-8vsb.onrender.com/api/address
+  body:
+    type: json
+    data: |-
+      {
+          "streetName": "404 Gadget Colony Road",
+          "landmark": "Near Dr. Jhatka Science Lab",
+          "pinCode": "249402",
+          "stateName": "Uttarakhand",
+          "cityName": "Furfuri Nagar",
+          "countryName": "India"
+        }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
